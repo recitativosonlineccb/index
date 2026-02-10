@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>😇 Recitativos CCB</title>
+    <link rel="shortcut icon" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgQ6mXtJ1EgfnnG_nLyCHeL2LMFUtMSEIDTAsi6tjuwnaofEmxsV0BzHTpF02l6bHJLY5rdE_cZtny8kKxQ5kgvwT7VKjvFZf0EsyJdymxU_Rq7nMoyIkdG83d67Zsf4gk4EE88N7wHPx3UcGPn5XhoBV4frGuuhRbLWndpK_7is-6GkXfx1YFHGOMUp2cP/w320-h320/favicon.png" type="image/x-icon">
+
+    <style>
+        :root {
+            --primary-blue: #1a237e;
+            --bg-gray: #f8f9fa;
+            --border-color: #d1d9e6;
+            --card-width: 95mm;
+            --card-height: 58mm;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: "Garamond", serif;
+            background-color: var(--bg-gray);
+            margin: 0;
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 50px;
+        }
+
+        header {
+            width: 100%; padding: 10px; background: white; 
+            border-bottom: 1px solid #ddd; display: flex; 
+            justify-content: center; align-items: center; 
+            position: fixed; top: 0; left: 0; z-index: 1000; 
+            box-shadow: 0 4px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            background: white; width: 95%; max-width: 800px; margin-top: 100px;
+            padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgb(59, 59, 59); 
+            text-align: center;
+        }
+
+        .row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .row > div { flex: 1; text-align: left; min-width: 120px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; font-size: 14px; color: #1a237e; }
+
+        input, select { 
+            width: 100%; padding: 12px; border: 2px solid var(--border-color); 
+            border-radius: 10px; font-size: 16px; outline: none; background-color: #fff;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus { 
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(26, 35, 126, 0.15);
+        }
+
+        .button-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .btn { flex: 1; min-width: 160px; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; }
+        .btn-blue { background-color: var(--primary-blue); }
+        .btn-green { background-color: #2e7d32; }
+        .btn-orange { background-color: #ff3300; }
+
+        #resultadoArea { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+
+        .folha-a4 {
+            background: white; 
+            width: 210mm; 
+            height: 297mm;
+            display: grid; 
+            grid-template-columns: var(--card-width) var(--card-width); 
+            grid-template-rows: repeat(4, var(--card-height));
+            gap: 0;
+            justify-content: center;
+            align-content: center;
+            border: 1px solid #eee; 
+            page-break-after: always;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .recitativo-card, .verso-card {
+            border: 0.1mm solid #000; 
+            padding: 3mm 4mm;
+            display: flex; 
+            flex-direction: column; 
+            background: #fff; 
+            height: var(--card-height); 
+            width: var(--card-width);
+            overflow: hidden;
+        }
+
+        .card-header-text { 
+            text-align: center; 
+            font-weight: bold;
+            font-size: 15px; 
+            margin-bottom: 2mm; 
+            letter-spacing: 0.5px;
+        }
+
+        .info-body { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            padding-bottom: 1mm;
+        }
+
+        .linha-campo { display: flex; align-items: flex-end; font-size: 14px; height: 30px; }
+        .label-fixa { font-weight: 500; margin-right: 5px; white-space: nowrap; }
+
+        .valor-campo {
+            border-bottom: 0.5px solid #000;
+            flex-grow: 1;
+            padding-left: 4px;
+            min-height: 14px;
+            text-transform: uppercase;
+            font-size: 13px;
+            line-height: 14px;
+        }
+
+        .verso-card { text-align: center; justify-content: center; padding: 5mm; }
+        .texto-biblico { font-size: 15px; font-style: italic; flex-grow: 1; display: flex; align-items: center; justify-content: center; line-height: 1.2; }
+        .referencia { font-size: 12px; text-align: right; font-weight: bold; margin-top: 1mm; }
+
+        @media (max-width: 600px) {
+            .container { margin-top: 80px; padding: 15px; }
+            #resultadoArea { transform: scale(0.4); transform-origin: top center; margin-bottom: -600px; }
+        }
+
+        @media print {
+            @page { size: A4 portrait; margin: 0 !important; }
+            body { background: none; padding: 0; margin: 0; }
+            header, .container, #popupAviso { display: none !important; }
+            #resultadoArea { margin: 0 !important; padding: 0 !important; transform: none !important; }
+            .folha-a4 { border: none !important; margin: 0 !important; box-shadow: none !important; display: grid !important; }
+        }
+
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .popup-box { background: #fff; width: 90%; max-width: 420px; border-radius: 16px; padding: 22px; text-align: center; }
+        .popup-box button { margin-top: 18px; width: 100%; padding: 12px; background: var(--primary-blue); color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="popupAviso" class="popup-overlay">
+    <div class="popup-box">
+        <h2>⚠️ Alinhamento de Impressão</h2>
+        <p>Para que a frente e o verso batam corretamente:</p>
+        <ul style="text-align: left; font-size: 14px;">
+            <li>Use <strong>Escala: 100%</strong>.</li>
+            <li>Defina <strong>Margens: Nenhuma</strong>.</li>
+        </ul>
+        <button onclick="fecharPopup()">Entendi</button>
+    </div>
+</div>
+
+<header>
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgsXvBtdnU2lPCYO6qa2hWGERo0xvoSM82gKSVNwmjU1C-2RjXwzJvhfKzJ74jRYMMBJcqzIw4SblExbfetMqM7-15e1C_1IIl6Y4kASPZ1RUlERkOHinCGLlivTGE8WdXUYeXovAkg28aQ6_5-anA4ufC9OTNx2mSzuR1wBeuJts8TVceBPAzrnkmWcZ2M/w320-h162/logo-ccb-light-oficial.png" alt="Logo" width="70">
+    &nbsp;<strong>Recitativos CCB</strong>
+</header>
+
+<div class="container">
+    <h2>Gerador de Recitativos</h2>
+    <div class="row">
+        <div style="flex: 2;"><label>NOME(s):</label><input type="text" id="nomes" placeholder="Nomes separados por vírgula" autofocus></div>
+        <div><label>LIVRO:</label><select id="livro" onchange="atualizarCapitulos()"><option value="">Selecione</option></select></div>
+    </div>
+    <div class="row">
+        <div><label>CAPÍTULO:</label><select id="capitulo" onchange="atualizarVersiculos()"></select></div>
+        <div><label>VERSOS:</label><select id="v_inicial"></select></div>
+        <div><label>ao:</label><select id="v_final"></select></div>
+    </div>
+    <div class="row">
+        <div><label>RECITATIVO PARA O DIA:</label><input type="date" id="data"></div>
+        <div><label>AUXILIAR:</label><input type="text" id="auxiliar"></div>
+    </div>
+    <div class="button-group">
+        <button class="btn btn-blue" onclick="gerar()">GERAR</button>
+        <button class="btn btn-green" onclick="window.print()">IMPRIMIR</button>
+        <button class="btn btn-orange" onclick="window.location.reload()">LIMPAR</button>
+    </div>
+</div>
+
+<div id="resultadoArea"></div>
+
+<script>
+    const selectLivro = document.getElementById('livro');
+    const selectCap = document.getElementById('capitulo');
+    const selectVIni = document.getElementById('v_inicial');
+    const selectVFim = document.getElementById('v_final');
+    const resultadoArea = document.getElementById('resultadoArea');
+    let bibliaACF = null; 
+
+    // FUNÇÃO PARA FECHAR POPUP E DAR FOCO NO NOME
+    function fecharPopup() {
+        document.getElementById("popupAviso").style.display = "none";
+        document.getElementById("nomes").focus();
+    }
+
+    async function carregarBiblia() {
+        try {
+            const response = await fetch('./ACF.json');
+            bibliaACF = await response.json();
+            bibliaACF.forEach((l, i) => {
+                let opt = document.createElement('option');
+                opt.value = i; opt.innerHTML = l.name || l.nome;
+                selectLivro.appendChild(opt);
+            });
+        } catch (e) { console.error("Erro ao carregar Bíblia."); }
+    }
+
+    function atualizarCapitulos() {
+        const lIdx = selectLivro.value;
+        selectCap.innerHTML = '<option value="">Sel.</option>';
+        if (lIdx === "") return;
+        bibliaACF[lIdx].chapters.forEach((c, i) => {
+            let opt = document.createElement('option');
+            opt.value = i; opt.innerHTML = i + 1;
+            selectCap.appendChild(opt);
+        });
+    }
+
+    function atualizarVersiculos() {
+        const lIdx = selectLivro.value;
+        const cIdx = selectCap.value;
+        selectVIni.innerHTML = ''; selectVFim.innerHTML = '';
+        if (cIdx === "") return;
+        bibliaACF[lIdx].chapters[cIdx].forEach((v, i) => {
+            let opt = document.createElement('option');
+            opt.value = i + 1; opt.innerHTML = i + 1;
+            selectVIni.appendChild(opt.cloneNode(true));
+            selectVFim.appendChild(opt);
+        });
+    }
+
+    function obterTexto(l, c, v) {
+        const verso = bibliaACF[l].chapters[c][v - 1];
+        return (typeof verso === 'object') ? (verso.text || verso.texto) : verso;
+    }
+
+    function gerar() {
+        const inputNomes = document.getElementById('nomes').value;
+        const listaNomes = inputNomes.split(',').map(n => n.trim()).filter(n => n !== "");
+        const livroIdx = selectLivro.value;
+        const livroNome = selectLivro.options[selectLivro.selectedIndex].text;
+        const capExib = parseInt(selectCap.value) + 1;
+        const vIni = parseInt(selectVIni.value);
+        const vFim = parseInt(selectVFim.value);
+        const aux = document.getElementById('auxiliar').value;
+        const valData = document.getElementById('data').value;
+        let dataStr = valData ? valData.split('-').reverse().join('/') : '';
+
+        if (livroIdx === "" || isNaN(vIni)) return alert("Selecione os campos!");
+
+        resultadoArea.innerHTML = "";
+        let nomeGlobalIdx = 0;
+        let versiculos = [];
+        for (let i = vIni; i <= vFim; i++) {
+            versiculos.push({ num: i, texto: obterTexto(livroIdx, selectCap.value, i) });
+        }
+
+        while (versiculos.length > 0) {
+            let lote = versiculos.splice(0, 8);
+            const folhaF = document.createElement('div');
+            folhaF.className = 'folha-a4';
+            lote.forEach(v => {
+                let nomeCard = listaNomes.length > 0 ? (listaNomes[nomeGlobalIdx] || '') : inputNomes;
+                nomeGlobalIdx++;
+                folhaF.innerHTML += `
+                    <div class="recitativo-card">
+                        <div class="card-header-text">CONGREGAÇÃO CRISTÃ NO BRASIL</div>
+                        <div class="info-body">
+                            <div class="linha-campo"><span class="label-fixa">NOME:</span> <span class="valor-campo">${nomeCard}</span></div>
+                            <div class="linha-campo"><span class="label-fixa">LIVRO:</span> <span class="valor-campo">${livroNome}</span></div>
+                            <div class="linha-campo">
+                                <span class="label-fixa">CAPÍTULO:</span> <span class="valor-campo" style="flex-grow:0; min-width:10mm;">${capExib}</span>
+                                <span class="label-fixa" style="margin-left:5px">VERSOS:</span> <span class="valor-campo">${v.num}</span>
+                            </div>
+                            <div class="linha-campo"><span class="label-fixa">RECITATIVO PARA O DIA:</span> <span class="valor-campo">${dataStr}</span></div>
+                            <div class="linha-campo"><span class="label-fixa">AUXILIAR:</span> <span class="valor-campo">${aux}</span></div>
+                        </div>
+                    </div>`;
+            });
+            resultadoArea.appendChild(folhaF);
+
+            const folhaV = document.createElement('div');
+            folhaV.className = 'folha-a4';
+            for (let i = 0; i < lote.length; i += 2) {
+                const par = [lote[i+1], lote[i]]; 
+                par.forEach(v => {
+                    if (v) {
+                        folhaV.innerHTML += `<div class="verso-card"><div class="texto-biblico">"${v.texto}"</div><div class="referencia">${livroNome} ${capExib}:${v.num}</div></div>`;
+                    } else {
+                        folhaV.innerHTML += `<div class="verso-card" style="border-color: transparent;"></div>`;
+                    }
+                });
+            }
+            resultadoArea.appendChild(folhaV);
+        }
+    }
+    carregarBiblia();
+</script>
+</body>
+</html>
